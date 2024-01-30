@@ -58,10 +58,35 @@ class App extends Component {
       imageUrl: '',
       box: {}, 
       route: 'signin',
-      isSignedIn: false
+      isSignedIn: false,
+      user: {
+        id: '',
+        name: '',
+        email: '',
+        entries: 0,
+        join: ''
+      }
     }
   }
 
+  componentDidMount() {
+    fetch('http://localhost:3000/')
+    .then(response => response.json())
+    .then(console.log)
+  }
+
+  loadUser = (data) => {
+    this.setState({user: {
+        id: data.id,
+        name: data.name,
+        email: data.email,
+        entries: data.entries,
+        join: data.join
+      }
+    }
+    )
+
+  }
   onRouteChange = (route) => {
     if(route === 'signout'){
       this.setState({isSignedIn: false})
@@ -127,13 +152,13 @@ class App extends Component {
         {route === 'home' 
         ? <div>
           <Logo />
-          <Rank/>
+          <Rank name={this.state.user.name} entries={this.state.user.entries}/>
           <ImageLinkForm onInputChange={this.onInputChange} onSubmitButton={this.onSubmitButton}/>
           <FaceRecognition imageUrl={imageUrl} box={box}/>
           </div>
         : (route === 'signin'
-        ? <Signin onRouteChange={this.onRouteChange}/>
-        :<Register onRouteChange={this.onRouteChange}/>)}        
+        ? <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
+        :<Register loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>)}        
       </div>
     );
   }
