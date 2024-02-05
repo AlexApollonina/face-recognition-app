@@ -121,17 +121,6 @@ class App extends Component {
     this.setState({imageUrl: this.state.input});
      fetch("https://api.clarifai.com/v2/models/" + 'face-detection' + "/outputs", returnClarifaiRequestOptions(this.state.input))
         .then(response => response.json())
-         /*.then(response => {
-        console.log('hi', response.outputs[0].data.regions[0].region_info.bounding_box)
-       
-        
-            .then(count => {
-              this.setState(Object.assign(this.state.user, { entries: count}))
-            })
-
-        }
-      this.displayFaceBox(this.calculateFaceLocation(response))
-      })*/
       .then(response => {
         if(response){
           fetch('http://localhost:3000/image', {
@@ -145,6 +134,7 @@ class App extends Component {
           .then(count => {
             this.setState(Object.assign(this.state.user, { entries: count}))
           })
+          .catch(console.log)
         }
         this.displayFaceBox(this.calculateFaceLocation(response))
       }) 
